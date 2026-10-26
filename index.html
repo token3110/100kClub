@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,197 +8,412 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap"
     />
-    <link rel="stylesheet" href="hark.css" />
-    <link rel="stylesheet" href="hark-hero.css" />
     <style>
-      .x-mono { font-family: "Geist Mono", ui-monospace, monospace; overflow-wrap: anywhere; }
-      .x-live { display: grid; gap: 6px; }
-      .x-live__count { font: var(--type-heading); font-variant-numeric: tabular-nums; }
-      .x-bar { height: 6px; border-radius: var(--r-pill); background: var(--stroke-primary); overflow: hidden; }
-      .x-bar__fill { height: 100%; width: 0; border-radius: inherit; background: var(--fill-system-green); transition: width var(--dur-draw) var(--ease-out); }
-      .x-prompt {
-        margin: 0 0 14px;
-        padding: 14px 16px;
-        border-radius: var(--r-s);
-        background: var(--fill-primary-on);
-        border: 1px solid var(--stroke-secondary);
-        font: var(--weight-regular) var(--size-small)/1.5 "Geist Mono", ui-monospace, monospace;
-        overflow-wrap: anywhere;
+      :root {
+        --gold: #f0b90b;
+        --ink: #0e0e0e;
+        --paper: #f5f1e6;
+        --display: "Archivo Black", "Anton", Impact, "Haettenschweiler", sans-serif;
+        --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+        --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+        --bd: 3px solid var(--ink);
+        --bdx: 5px solid var(--ink);
+        --pad: 18px;
       }
-      .x-addr { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 18px 22px; border-radius: var(--r-m); background: var(--fill-tertiary); margin-bottom: 16px; }
-      .x-addr code { font: var(--weight-regular) var(--size-body)/var(--lh) "Geist Mono", ui-monospace, monospace; overflow-wrap: anywhere; min-width: 0; flex: 1 1 260px; }
-      .x-gap { margin-top: 16px; }
+      * { box-sizing: border-box; }
+      html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: var(--sans);
+        font-size: 16px;
+        line-height: 1.5;
+      }
+      img { max-width: 100%; display: block; }
+      a { color: inherit; }
+      ::selection { background: var(--gold); color: var(--ink); }
+      .wrap { max-width: 1120px; margin: 0 auto; padding: 0 14px; }
+
+      /* ---- nav ---- */
+      .bar {
+        position: sticky; top: 0; z-index: 40;
+        background: var(--ink); color: var(--paper);
+        border-bottom: var(--bdx);
+      }
+      .bar__in { display: flex; align-items: center; gap: 10px; min-height: 56px; }
+      .bar__logo { font-family: var(--display); font-size: 20px; letter-spacing: -0.02em; margin-right: auto; }
+      .bar__logo span { color: var(--gold); }
+      .bar a.navlink {
+        font-family: var(--mono); font-size: 12px; font-weight: 700; text-decoration: none;
+        letter-spacing: .08em; padding: 10px 8px; min-height: 44px; display: inline-flex; align-items: center;
+      }
+      .bar a.navlink:hover { color: var(--gold); }
+      .bar a.navlink { min-width: 44px; justify-content: center; }
+      @media (max-width: 620px) { .bar__in { gap: 2px; } .bar a.navlink { padding: 10px 3px; font-size: 12px; letter-spacing: .02em; } .bar__logo { font-size: 16px; } }
+      @media (max-width: 400px) { .navlink i { display: none; } }
+      .navlink i { font-style: normal; }
+
+      /* ---- hero ---- */
+      .hero { padding: 26px 0 0; }
+      .eyebrow {
+        font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: .14em;
+        text-transform: uppercase; background: var(--ink); color: var(--paper);
+        display: inline-block; padding: 6px 10px;
+      }
+      .bigword {
+        font-family: var(--display); line-height: .78; letter-spacing: -0.045em;
+        font-size: clamp(5.5rem, 27vw, 20rem); margin: 10px 0 0;
+        -webkit-text-stroke: 2px var(--ink);
+      }
+      .bigword b { color: var(--ink); background: var(--gold); font-weight: inherit; display: inline-block; padding: .06em .03em 0; -webkit-text-stroke: 0; }
+      .hero__sub { font-size: clamp(1rem, 3.6vw, 1.5rem); font-weight: 600; max-width: 34ch; margin: 14px 0 0; }
+      .hero__meta { font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; margin: 8px 0 0; }
+
+      /* ---- scoreboard ---- */
+      .board { border: var(--bdx); background: var(--ink); color: var(--paper); margin-top: 20px; }
+      .board__row { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; padding: 16px var(--pad) 10px; }
+      .board__num {
+        font-family: var(--display); font-size: clamp(2.6rem, 12vw, 5rem); line-height: .9;
+        color: var(--gold); font-variant-numeric: tabular-nums; letter-spacing: -0.02em;
+      }
+      .board__of { font-family: var(--display); font-size: clamp(1.1rem, 4.5vw, 2rem); letter-spacing: -0.01em; }
+      .board__tag { font-family: var(--mono); font-size: 12px; letter-spacing: .18em; margin-left: auto; align-self: center; }
+      .board__tag i { display: inline-block; width: 9px; height: 9px; background: var(--gold); margin-right: 6px; animation: blip 2s steps(1,end) infinite; }
+      @keyframes blip { 50% { opacity: .15; } }
+      .track { height: 26px; border-top: var(--bdx); background: #1b1b1b; }
+      .track__fill { height: 100%; width: 0; background: var(--gold); transition: width .6s cubic-bezier(.2,.7,.2,1); }
+      .board__feet { display: flex; flex-wrap: wrap; gap: 6px 16px; padding: 10px var(--pad) 14px; border-top: var(--bd); border-color: #333; font-family: var(--mono); font-size: 12px; }
+
+      /* ---- buttons ---- */
+      .btn {
+        display: inline-flex; align-items: center; justify-content: center; min-height: 52px;
+        padding: 14px 22px; border: var(--bdx); background: var(--gold); color: var(--ink);
+        font-family: var(--display); font-size: 17px; letter-spacing: .01em; text-decoration: none;
+        box-shadow: 6px 6px 0 var(--ink); cursor: pointer; text-align: center;
+        transition: transform .08s linear, box-shadow .08s linear;
+      }
+      .btn:hover { transform: translate(3px, 3px); box-shadow: 3px 3px 0 var(--ink); }
+      .btn:active { transform: translate(6px, 6px); box-shadow: 0 0 0 var(--ink); }
+      .btn--ghost { background: var(--paper); }
+      .btn--sm { min-height: 44px; padding: 10px 16px; font-size: 14px; box-shadow: 4px 4px 0 var(--ink); border-width: 3px; }
+      .btn--sm:hover { transform: translate(2px,2px); box-shadow: 2px 2px 0 var(--ink); }
+      .cta { display: flex; flex-wrap: wrap; gap: 16px; margin: 22px 0 6px; }
+
+      /* ---- membership card ---- */
+      .cardzone { perspective: 1000px; padding: 6px 0 2px; }
+      .memcard {
+        border: var(--bdx); background: var(--ink); color: var(--paper);
+        box-shadow: 10px 10px 0 var(--gold);
+        transform: rotate(-2deg); transform-style: preserve-3d;
+        transition: transform .35s cubic-bezier(.2,.7,.2,1);
+        max-width: 420px;
+      }
+      .cardzone:hover .memcard, .memcard.is-tilt { transform: rotateY(-12deg) rotateX(7deg) rotate(0deg); }
+      .memcard__top { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; font-family: var(--mono); font-size: 12px; letter-spacing: .18em; border-bottom: var(--bd); border-color: var(--gold); }
+      .memcard__top b { color: var(--gold); }
+      .memcard__art { height: 210px; overflow: hidden; }
+      .memcard__art img { height: 100%; width: 100%; object-fit: cover; object-position: 61% 50%; }
+      .memcard__foot { display: flex; justify-content: space-between; gap: 10px; padding: 12px 14px; font-family: var(--mono); font-size: 12px; letter-spacing: .1em; border-top: var(--bd); border-color: var(--gold); }
+      .herogrid { display: grid; gap: 22px; grid-template-columns: 1fr; align-items: start; }
+      @media (min-width: 880px) { .herogrid { grid-template-columns: 1.25fr .75fr; gap: 34px; } }
+
+      /* ---- marquee ---- */
+      .marquee { border-top: var(--bdx); border-bottom: var(--bdx); background: var(--gold); overflow: hidden; margin-top: 26px; }
+      .marquee__in { display: flex; width: max-content; animation: slide 28s linear infinite; }
+      .marquee p { font-family: var(--display); font-size: clamp(1rem, 3.4vw, 1.6rem); padding: 10px 0; margin: 0; white-space: nowrap; letter-spacing: .01em; }
+      .marquee p span { padding: 0 18px; }
+      @keyframes slide { to { transform: translateX(-50%); } }
+      @media (prefers-reduced-motion: reduce) { .marquee__in { animation: none; } .board__tag i { animation: none; } }
+
+      /* ---- blocks ---- */
+      .block { border: var(--bdx); margin: 26px 0; background: var(--paper); }
+      .block--gold { background: var(--gold); }
+      .block--ink { background: var(--ink); color: var(--paper); }
+      .block__head { display: flex; align-items: flex-start; gap: 14px; padding: 16px var(--pad); border-bottom: var(--bdx); }
+      .block--ink .block__head { border-color: var(--gold); }
+      .block__num { font-family: var(--display); font-size: clamp(2rem, 8vw, 3.2rem); line-height: .85; }
+      .block--gold .block__num, .block--ink .block__num { color: inherit; }
+      .block__t h2 { font-family: var(--display); font-size: clamp(1.3rem, 5vw, 2.1rem); line-height: 1.02; margin: 0; letter-spacing: -0.02em; }
+      .block__t p { margin: 6px 0 0; font-size: 14px; font-weight: 600; max-width: 56ch; }
+      .block__label { font-family: var(--mono); font-size: 12px; letter-spacing: .2em; margin: 0 0 4px; }
+      .block__body { padding: var(--pad); }
+
+      /* ---- stats strip ---- */
+      .facts { display: grid; grid-template-columns: repeat(2, 1fr); }
+      .facts > div { border-right: var(--bd); border-bottom: var(--bd); padding: 14px var(--pad); }
+      .facts > div:nth-child(2n) { border-right: 0; }
+      .facts > div:nth-child(n + 3) { border-bottom: 0; }
+      @media (min-width: 760px) {
+        .facts { grid-template-columns: repeat(4, 1fr); }
+        .facts > div { border-bottom: 0; }
+        .facts > div:nth-child(2n) { border-right: var(--bd); }
+        .facts > div:last-child { border-right: 0; }
+      }
+      .facts b { display: block; font-family: var(--display); font-size: clamp(1.8rem, 7vw, 2.8rem); line-height: 1; letter-spacing: -0.03em; }
+      .facts span { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+
+      /* ---- tickets ---- */
+      .tickets { display: grid; gap: 20px; }
+      @media (min-width: 820px) { .tickets { grid-template-columns: 1fr 1fr; } }
+      .ticket { position: relative; background: var(--paper); border: 3px dashed var(--ink); padding: 18px 16px; }
+      .block--gold .ticket { background: var(--paper); }
+      .ticket::before, .ticket::after {
+        content: ""; position: absolute; top: 50%; width: 22px; height: 22px; border-radius: 50%;
+        background: var(--gold); border: 3px solid var(--ink); transform: translateY(-50%);
+      }
+      .ticket::before { left: -14px; }
+      .ticket::after { right: -14px; }
+      .ticket h3 { font-family: var(--display); font-size: 20px; margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+      .tag { font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: .1em; background: var(--ink); color: var(--gold); padding: 4px 8px; text-transform: uppercase; }
+      .prompt {
+        font-family: var(--mono); font-size: 12.5px; line-height: 1.55; margin: 12px 0 14px;
+        background: var(--ink); color: var(--paper); padding: 14px; overflow-wrap: anywhere;
+        border-left: 6px solid var(--gold);
+      }
+      .note { font-family: var(--mono); font-size: 12px; margin: 16px 0 0; }
+
+      /* ---- rarity bars ---- */
+      .bars { display: grid; gap: 12px; }
+      .rrow { display: grid; grid-template-columns: 110px 1fr 64px; align-items: center; gap: 10px; }
+      @media (max-width: 520px) { .rrow { grid-template-columns: 88px 1fr 56px; gap: 8px; } }
+      .rrow__n { font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+      .rrow__t { border: var(--bd); background: var(--paper); height: 30px; }
+      .rrow__f { height: 100%; background: var(--ink); min-width: 4px; }
+      .rrow--gold .rrow__f { background: var(--gold); }
+      .rrow--gold .rrow__n::after { content: " ★"; }
+      .rrow__v { font-family: var(--mono); font-size: 13px; font-weight: 700; text-align: right; }
+      .traits { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); margin-top: 22px; }
+      .trait { border: var(--bd); padding: 12px 14px; background: var(--paper); }
+      .trait h4 { font-family: var(--display); font-size: 15px; margin: 0 0 4px; letter-spacing: .02em; }
+      .trait h4 i { font-family: var(--mono); font-style: normal; font-size: 12px; background: var(--ink); color: var(--gold); padding: 2px 6px; margin-left: 6px; }
+      .trait p { margin: 0; font-size: 13.5px; }
+      .frame { border: var(--bdx); background: var(--ink); margin-bottom: 20px; }
+      .frame figcaption { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--paper); padding: 10px 14px; border-top: var(--bd); border-color: var(--gold); }
+
+      /* ---- contract ---- */
+      .addr { border: var(--bd); background: var(--paper); padding: 14px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+      .addr code { font-family: var(--mono); font-size: 13px; font-weight: 700; overflow-wrap: anywhere; flex: 1 1 260px; }
+      .addr__row { display: flex; gap: 12px; flex-wrap: wrap; }
+      .kv { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-top: 18px; }
+      .kv > div { border: var(--bd); padding: 12px 14px; background: var(--paper); }
+      .kv h4 { font-family: var(--display); font-size: 14px; margin: 0 0 2px; letter-spacing: .04em; }
+      .kv em { font-style: normal; font-family: var(--mono); font-size: 12px; letter-spacing: .1em; display: block; margin-bottom: 4px; }
+      .kv code { font-family: var(--mono); font-size: 12px; overflow-wrap: anywhere; display: block; }
+      .fn { width: 100%; border-collapse: collapse; margin-top: 18px; background: var(--paper); }
+      .fn caption { font-family: var(--mono); font-size: 12px; letter-spacing: .2em; text-transform: uppercase; text-align: left; padding-bottom: 8px; color: inherit; }
+      .fn th, .fn td { border: var(--bd); padding: 10px 12px; text-align: left; vertical-align: top; }
+      .fn thead th { background: var(--ink); color: var(--gold); font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; }
+      .fn tbody th { font-family: var(--mono); font-size: 12.5px; font-weight: 700; overflow-wrap: anywhere; }
+      .fn td { font-size: 13.5px; }
+
+      /* ---- faq ---- */
+      .faq { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+      .faq > div { border: var(--bd); border-color: var(--gold); padding: 14px; }
+      .faq h3 { font-family: var(--display); font-size: 16px; margin: 0 0 6px; color: var(--gold); }
+      .faq p { margin: 0; font-size: 14px; }
+
+      /* ---- footer ---- */
+      .foot { border-top: var(--bdx); background: var(--ink); color: var(--paper); margin-top: 30px; }
+      .foot__in { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; padding: 20px 0; }
+      .foot p { margin: 0; font-family: var(--mono); font-size: 12px; }
+      .foot nav { display: flex; flex-wrap: wrap; gap: 4px 14px; margin-left: auto; }
+      .foot nav a { font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; text-decoration: none; min-height: 44px; min-width: 44px; justify-content: center; display: inline-flex; align-items: center; }
+      .foot nav a:hover { color: var(--gold); }
     </style>
   </head>
-  <body>
-    <div class="page" id="top">
-      <header class="nav glass" data-auto></header>
-      <main class="main">
-        <section class="hero">
-          <img class="hero__img" src="hero100k.png" alt="Four neon 100K Club badges on black" />
-          <div class="hero__copy">
-            <p class="hero__eyebrow">Agent ID just passed 100,000 holders</p>
-            <h1>100K Club</h1>
+  <body id="top">
+    <header class="bar">
+      <div class="wrap bar__in">
+        <div class="bar__logo">100K<span>CLUB</span></div>
+        <a class="navlink" href="#mint"><i>01&nbsp;</i>MINT</a>
+        <a class="navlink" href="#rarity"><i>02&nbsp;</i>RARITY</a>
+        <a class="navlink" href="#contract"><i>03&nbsp;</i>CONTRACT</a>
+        <a class="navlink" href="#faq"><i>04&nbsp;</i>FAQ</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="wrap herogrid">
+          <div>
+            <p class="eyebrow">Agent ID just passed 100,000 holders</p>
+            <h1 class="bigword">10<b>0</b>K</h1>
             <p class="hero__sub">10,000 on-chain badges for the first 100K Agent IDs. Agent-only. First mint free.</p>
             <p class="hero__meta">SPACE ID Agent ID (.ai) only · BNB Smart Chain</p>
-          </div>
-          <aside class="callout" aria-label="Next step">
-            <p class="callout__head"><span class="hark-mark" data-size="16"></span> Next step</p>
-            <p class="callout__lead"><strong>Copy the Mint prompt and give it to your agent.</strong> First badge is free.</p>
-            <div class="x-live" aria-live="polite">
-              <p class="x-live__count"><span id="live-supply">—</span> / 10,000 minted</p>
-              <div class="x-bar" role="progressbar" aria-label="Badges minted" aria-valuemin="0" aria-valuemax="10000" aria-valuenow="0" id="live-bar-wrap"><div class="x-bar__fill" id="live-bar"></div></div>
-              <p class="fineprint">2nd mint now ≈ <span id="live-price">—</span> BNB · live from BSC</p>
-            </div>
-            <a class="btn" href="#mint" data-copy="prompt-1">Copy Mint prompt</a>
-          </aside>
-        </section>
 
-        <section class="stats" aria-label="Key facts">
-          <div class="stat"><span class="stat__fig">10,000</span><span class="stat__label">Supply</span></div>
-          <div class="stat"><span class="stat__fig">FREE</span><span class="stat__label">1st mint (gas only)</span></div>
-          <div class="stat"><span class="stat__fig">$0.50</span><span class="stat__label">2nd mint, in BNB</span></div>
-          <div class="stat"><span class="stat__fig">2</span><span class="stat__label">Max per wallet</span></div>
-        </section>
+            <div class="board" aria-live="polite">
+              <div class="board__row">
+                <span class="board__num" id="live-supply">0000</span>
+                <span class="board__of">/ 10,000 MINTED</span>
+                <span class="board__tag"><i></i>LIVE FROM BSC</span>
+              </div>
+              <div class="track" role="progressbar" aria-label="Badges minted" aria-valuemin="0" aria-valuemax="10000" aria-valuenow="0" id="live-bar-wrap">
+                <div class="track__fill" id="live-bar"></div>
+              </div>
+              <div class="board__feet">
+                <span>2ND MINT NOW ≈ <span id="live-price">—</span> BNB</span>
+                <span>MAX 2 PER WALLET</span>
+              </div>
+            </div>
 
-        <section class="section" id="mint" data-nav="Mint">
-          <div class="head">
-            <p class="head__eyebrow">Mint with your agent</p>
-            <h2>Hand your agent one prompt and it mints for you.</h2>
-            <p class="head__sub">The wallet must hold a SPACE ID Agent ID (.ai).</p>
-          </div>
-          <div class="cards">
-            <div>
-              <h3>Mint 1 <span class="pill">free</span></h3>
-              <p class="x-prompt" id="prompt-1">Mint 1 100K Club badge on BSC: call mint(1) on contract 0xcd123737b1ab24bf97b4fcec0fe763de573bbe0b with value 0. Your wallet must hold a SPACE ID Agent ID (.ai). First badge per wallet is free (gas only).</p>
-              <a class="btn" href="#mint" data-copy="prompt-1">Copy</a>
-            </div>
-            <div>
-              <h3>Mint 2 <span class="pill">free + $0.50</span></h3>
-              <p class="x-prompt" id="prompt-2">Mint 2 100K Club badges on BSC: first read quote(myWallet, 2) on contract 0xcd123737b1ab24bf97b4fcec0fe763de573bbe0b, then call mint(2) sending that quote as the value (wei). Your wallet must hold a SPACE ID Agent ID (.ai). Max 2 per wallet; excess BNB is refunded.</p>
-              <a class="btn" href="#mint" data-copy="prompt-2">Copy</a>
+            <div class="cta">
+              <a class="btn" href="#mint" data-copy="prompt-1">COPY MINT PROMPT</a>
+              <a class="btn btn--ghost" href="#rarity">SEE THE BADGES</a>
             </div>
           </div>
-          <p class="fineprint x-gap">Already minted 1? Call quote(myWallet, 1) and mint(1) with that value for your second badge.</p>
-        </section>
 
-        <section class="section" id="rarity" data-nav="Rarity">
-          <div class="head">
-            <p class="head__eyebrow">Rarity</p>
-            <h2>Six tiers, four traits, art drawn by the contract itself.</h2>
-            <p class="head__sub">Fully on-chain. No IPFS.</p>
+          <div class="cardzone">
+            <div class="memcard" id="memcard">
+              <div class="memcard__top"><span>100K CLUB</span><b>MEMBER</b></div>
+              <div class="memcard__art"><img src="hero100k.png" alt="A gold 100K Agent Club badge" /></div>
+              <div class="memcard__foot"><span>AGENT ID ONLY</span><span>BNB CHAIN</span></div>
+            </div>
           </div>
-          <figure class="band">
-            <img src="grid.png" alt="Nine sample 100K Club badges in different shapes, colors and backgrounds" />
-            <figcaption>Nine sample badges</figcaption>
-          </figure>
-          <div class="pair x-gap">
-            <div class="table-wrap">
-              <table>
-                <caption>Odds per badge</caption>
-                <thead>
-                  <tr><th scope="col">Tier</th><th scope="col">Odds</th></tr>
-                </thead>
-                <tbody>
-                  <tr><th scope="row">Common</th><td class="num">54.8%</td></tr>
-                  <tr><th scope="row">Uncommon</th><td class="num">25%</td></tr>
-                  <tr><th scope="row">Rare</th><td class="num">14%</td></tr>
-                  <tr><th scope="row">Legendary</th><td class="num">5%</td></tr>
-                  <tr><th scope="row">Mythic</th><td class="num">1%</td></tr>
-                  <tr class="is-highlight"><th scope="row">Genesis <small>Gold badge</small><span class="dot">Rarest</span></th><td class="num">0.2%</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="cards">
-              <div>
-                <h3>Shape <span class="pill">4</span></h3>
-                <p>Circle, Hexagon, Shield, Octagon</p>
-              </div>
-              <div>
-                <h3>Color <span class="pill">8</span></h3>
-                <p>Binance Gold, Cyber Mint, Hot Pink, Ice Blue, Lava, Violet, Lime, Chrome</p>
-              </div>
-              <div>
-                <h3>Background <span class="pill">6</span></h3>
-                <p>Void, Grid, Dusk, Matrix, Aurora, Deep Sea</p>
-              </div>
-              <div>
-                <h3>Mark <span class="pill">5</span></h3>
-                <p>Bolt, Star, Eye, Chip, Crown</p>
-              </div>
-            </div>
+        </div>
+      </section>
+
+      <div class="marquee" aria-hidden="true">
+        <div class="marquee__in">
+          <p><span>AGENT ID ONLY ✦ FIRST MINT FREE ✦ 10,000 SUPPLY ✦ MAX 2 PER WALLET ✦ FULLY ON-CHAIN ✦</span></p>
+          <p><span>AGENT ID ONLY ✦ FIRST MINT FREE ✦ 10,000 SUPPLY ✦ MAX 2 PER WALLET ✦ FULLY ON-CHAIN ✦</span></p>
+        </div>
+      </div>
+
+      <div class="wrap">
+        <section class="block">
+          <div class="facts">
+            <div><b>10,000</b><span>Supply</span></div>
+            <div><b>FREE</b><span>1st mint (gas only)</span></div>
+            <div><b>$0.50</b><span>2nd mint, in BNB</span></div>
+            <div><b>2</b><span>Max per wallet</span></div>
           </div>
         </section>
 
-        <section class="section" id="contract" data-nav="Contract">
-          <div class="head">
-            <p class="head__eyebrow">Contract</p>
-            <h2>No owner, no pause, no withdraw, no upgrade.</h2>
-          </div>
-          <div class="x-addr">
-            <code id="addr">0xcd123737b1ab24bf97b4fcec0fe763de573bbe0b</code>
-            <div class="links">
-              <a class="btn" href="#contract" data-copy="addr">Copy address</a>
-              <a class="btn" href="https://bscscan.com/address/0xcd123737b1ab24bf97b4fcec0fe763de573bbe0b" target="_blank" rel="noopener">BscScan</a>
+        <section class="block block--gold" id="mint">
+          <div class="block__head">
+            <div class="block__num">01</div>
+            <div class="block__t">
+              <p class="block__label">MINT</p>
+              <h2>HAND YOUR AGENT ONE PROMPT AND IT MINTS FOR YOU.</h2>
+              <p>The wallet must hold a SPACE ID Agent ID (.ai).</p>
             </div>
           </div>
-          <div class="pair">
-            <div class="cards">
-              <div>
-                <h3>Agent ID gate</h3>
-                <p class="x-mono">0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F</p>
+          <div class="block__body">
+            <div class="tickets">
+              <div class="ticket">
+                <h3>MINT 1 <span class="tag">free</span></h3>
+                <p class="prompt" id="prompt-1">Mint 1 100K Club badge on BSC: call mint(1) on contract 0xcd123737b1ab24bf97b4fcec0fe763de573bbe0b with value 0. Your wallet must hold a SPACE ID Agent ID (.ai). First badge per wallet is free (gas only).</p>
+                <a class="btn btn--sm" href="#mint" data-copy="prompt-1">COPY</a>
               </div>
-              <div>
-                <h3>Price feed</h3>
-                <p class="sub">Chainlink BNB/USD</p>
-                <p class="x-mono">0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE</p>
+              <div class="ticket">
+                <h3>MINT 2 <span class="tag">free + $0.50</span></h3>
+                <p class="prompt" id="prompt-2">Mint 2 100K Club badges on BSC: first read quote(myWallet, 2) on contract 0xcd123737b1ab24bf97b4fcec0fe763de573bbe0b, then call mint(2) sending that quote as the value (wei). Your wallet must hold a SPACE ID Agent ID (.ai). Max 2 per wallet; excess BNB is refunded.</p>
+                <a class="btn btn--sm" href="#mint" data-copy="prompt-2">COPY</a>
               </div>
             </div>
-            <div class="table-wrap">
-              <table>
-                <caption>Functions</caption>
-                <thead>
-                  <tr><th scope="col">Function</th><th scope="col">Does</th></tr>
-                </thead>
-                <tbody>
-                  <tr><th scope="row" class="x-mono">mint(uint256 qty)</th><td>Mints badges</td></tr>
-                  <tr><th scope="row" class="x-mono">quote(address wallet, uint256 qty)</th><td>Price in wei for that wallet</td></tr>
-                  <tr><th scope="row" class="x-mono">totalSupply()</th><td>Badges minted so far</td></tr>
-                  <tr><th scope="row" class="x-mono">mintedBy(address)</th><td>Badges a wallet has minted</td></tr>
-                  <tr><th scope="row" class="x-mono">tokenURI(id)</th><td>On-chain metadata and art</td></tr>
-                </tbody>
-              </table>
+            <p class="note">Already minted 1? Call quote(myWallet, 1) and mint(1) with that value for your second badge.</p>
+          </div>
+        </section>
+
+        <section class="block" id="rarity">
+          <div class="block__head">
+            <div class="block__num">02</div>
+            <div class="block__t">
+              <p class="block__label">RARITY</p>
+              <h2>SIX TIERS, FOUR TRAITS, ART DRAWN BY THE CONTRACT ITSELF.</h2>
+              <p>Fully on-chain. No IPFS.</p>
+            </div>
+          </div>
+          <div class="block__body">
+            <figure class="frame" style="margin-top: 0">
+              <img src="grid.png" alt="Nine sample 100K Club badges in different shapes, colors and backgrounds" />
+              <figcaption>Nine sample badges</figcaption>
+            </figure>
+            <div class="bars">
+              <div class="rrow"><span class="rrow__n">Common</span><div class="rrow__t"><div class="rrow__f" style="width: 100%"></div></div><span class="rrow__v">54.8%</span></div>
+              <div class="rrow"><span class="rrow__n">Uncommon</span><div class="rrow__t"><div class="rrow__f" style="width: 45.6%"></div></div><span class="rrow__v">25%</span></div>
+              <div class="rrow"><span class="rrow__n">Rare</span><div class="rrow__t"><div class="rrow__f" style="width: 25.5%"></div></div><span class="rrow__v">14%</span></div>
+              <div class="rrow"><span class="rrow__n">Legendary</span><div class="rrow__t"><div class="rrow__f" style="width: 9.1%"></div></div><span class="rrow__v">5%</span></div>
+              <div class="rrow"><span class="rrow__n">Mythic</span><div class="rrow__t"><div class="rrow__f" style="width: 1.8%"></div></div><span class="rrow__v">1%</span></div>
+              <div class="rrow rrow--gold"><span class="rrow__n">Genesis</span><div class="rrow__t"><div class="rrow__f" style="width: 1%"></div></div><span class="rrow__v">0.2%</span></div>
+            </div>
+            <p class="note">Odds per badge. Genesis is the gold badge — the rarest.</p>
+            <div class="traits">
+              <div class="trait"><h4>SHAPE <i>4</i></h4><p>Circle, Hexagon, Shield, Octagon</p></div>
+              <div class="trait"><h4>COLOR <i>8</i></h4><p>Binance Gold, Cyber Mint, Hot Pink, Ice Blue, Lava, Violet, Lime, Chrome</p></div>
+              <div class="trait"><h4>BACKGROUND <i>6</i></h4><p>Void, Grid, Dusk, Matrix, Aurora, Deep Sea</p></div>
+              <div class="trait"><h4>MARK <i>5</i></h4><p>Bolt, Star, Eye, Chip, Crown</p></div>
             </div>
           </div>
         </section>
 
-        <section class="section" id="faq" data-nav="FAQ">
-          <div class="head"><h2>Short answers.</h2></div>
-          <div class="cards">
-            <div>
-              <h3>Who can mint?</h3>
-              <p>Only wallets holding a SPACE ID Agent ID (.ai).</p>
+        <section class="block block--gold" id="contract">
+          <div class="block__head">
+            <div class="block__num">03</div>
+            <div class="block__t">
+              <p class="block__label">CONTRACT</p>
+              <h2>NO OWNER, NO PAUSE, NO WITHDRAW, NO UPGRADE.</h2>
             </div>
-            <div>
-              <h3>How much?</h3>
-              <p>First badge free (gas only), second $0.50 in BNB at the live Chainlink price.</p>
+          </div>
+          <div class="block__body">
+            <div class="addr">
+              <code id="addr">0xcd123737b1ab24bf97b4fcec0fe763de573bbe0b</code>
+              <div class="addr__row">
+                <a class="btn btn--sm" href="#contract" data-copy="addr">COPY ADDRESS</a>
+                <a class="btn btn--sm btn--ghost" href="https://bscscan.com/address/0xcd123737b1ab24bf97b4fcec0fe763de573bbe0b" target="_blank" rel="noopener">BSCSCAN</a>
+              </div>
             </div>
-            <div>
-              <h3>How many?</h3>
-              <p>10,000 total, max 2 per wallet.</p>
+            <div class="kv">
+              <div><h4>AGENT ID GATE</h4><code>0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F</code></div>
+              <div><h4>PRICE FEED</h4><em>Chainlink BNB/USD</em><code>0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE</code></div>
+            </div>
+            <table class="fn">
+              <caption>Functions</caption>
+              <thead>
+                <tr><th scope="col">Function</th><th scope="col">Does</th></tr>
+              </thead>
+              <tbody>
+                <tr><th scope="row">mint(uint256 qty)</th><td>Mints badges</td></tr>
+                <tr><th scope="row">quote(address wallet, uint256 qty)</th><td>Price in wei for that wallet</td></tr>
+                <tr><th scope="row">totalSupply()</th><td>Badges minted so far</td></tr>
+                <tr><th scope="row">mintedBy(address)</th><td>Badges a wallet has minted</td></tr>
+                <tr><th scope="row">tokenURI(id)</th><td>On-chain metadata and art</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="block block--ink" id="faq">
+          <div class="block__head">
+            <div class="block__num">04</div>
+            <div class="block__t">
+              <p class="block__label">FAQ</p>
+              <h2>SHORT ANSWERS.</h2>
+            </div>
+          </div>
+          <div class="block__body">
+            <div class="faq">
+              <div><h3>WHO CAN MINT?</h3><p>Only wallets holding a SPACE ID Agent ID (.ai).</p></div>
+              <div><h3>HOW MUCH?</h3><p>First badge free (gas only), second $0.50 in BNB at the live Chainlink price.</p></div>
+              <div><h3>HOW MANY?</h3><p>10,000 total, max 2 per wallet.</p></div>
             </div>
           </div>
         </section>
-      </main>
-      <footer class="foot">
+      </div>
+    </main>
+
+    <footer class="foot">
+      <div class="wrap foot__in">
         <p>Experimental collectible. Not financial advice.</p>
-        <nav aria-label="Back to sections" data-auto></nav>
-        <a class="badge" href="https://hark.com/" target="_blank" rel="noopener"><span class="hark-mark"></span><span>built by hark</span></a>
-      </footer>
-    </div>
-    <script src="hark.js"></script>
+        <nav aria-label="Back to sections">
+          <a href="#mint">Mint</a><a href="#rarity">Rarity</a><a href="#contract">Contract</a><a href="#faq">FAQ</a><a href="#top">Top</a>
+        </nav>
+      </div>
+    </footer>
+
     <script>
       (function () {
         // Copy buttons
@@ -218,10 +433,17 @@
           b.addEventListener("click", function (e) {
             e.preventDefault();
             var src = document.getElementById(b.getAttribute("data-copy"));
-            copyText(src.textContent.trim()).then(function () { b.textContent = "Copied"; }, function () { b.textContent = "Select and copy"; })
+            copyText(src.textContent.trim()).then(function () { b.textContent = "COPIED ✓"; }, function () { b.textContent = "SELECT AND COPY"; })
               .then(function () { setTimeout(function () { b.textContent = label; }, 1800); });
           });
         });
+
+        // Card tilt on touch
+        var card = document.getElementById("memcard");
+        if (card) {
+          card.addEventListener("touchstart", function () { card.classList.add("is-tilt"); }, { passive: true });
+          card.addEventListener("touchend", function () { setTimeout(function () { card.classList.remove("is-tilt"); }, 500); });
+        }
 
         // Live data from BSC
         var RPCS = ["https://bsc-rpc.publicnode.com", "https://bsc-dataseed.binance.org"];
@@ -250,13 +472,14 @@
           if (f >= 1000000n) { whole += 1n; f -= 1000000n; }
           return whole.toString() + "." + f.toString().padStart(6, "0");
         }
+        function pad(n) { return n < 10000 ? String(n).padStart(4, "0") : n.toLocaleString("en-US"); }
         function tick() {
           call("0x18160ddd").then(function (v) {
             var n = Number(v); last.supply = n;
-            elSupply.textContent = n.toLocaleString("en-US");
+            elSupply.textContent = pad(n);
             elBar.style.width = Math.min(100, n / 100) + "%";
             elWrap.setAttribute("aria-valuenow", String(n));
-          }).catch(function () { if (last.supply === null) elSupply.textContent = "—"; });
+          }).catch(function () { if (last.supply === null) elSupply.textContent = "0000"; });
           call("0xb7ec2086").then(function (v) {
             last.price = fmtBNB(v); elPrice.textContent = last.price;
           }).catch(function () { if (last.price === null) elPrice.textContent = "—"; });
