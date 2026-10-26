@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>100K Club — The Agent ID Badge on BSC</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&display=swap"
+    />
+    <link rel="stylesheet" href="hark.css" />
+    <link rel="stylesheet" href="hark-hero.css" />
+    <style>
+      .x-mono { font-family: "Geist Mono", ui-monospace, monospace; overflow-wrap: anywhere; }
+      .x-live { display: grid; gap: 6px; }
+      .x-live__count { font: var(--type-heading); font-variant-numeric: tabular-nums; }
+      .x-bar { height: 6px; border-radius: var(--r-pill); background: var(--stroke-primary); overflow: hidden; }
+      .x-bar__fill { height: 100%; width: 0; border-radius: inherit; background: var(--fill-system-green); transition: width var(--dur-draw) var(--ease-out); }
+      .x-prompt {
+        margin: 0 0 14px;
+        padding: 14px 16px;
+        border-radius: var(--r-s);
+        background: var(--fill-primary-on);
+        border: 1px solid var(--stroke-secondary);
+        font: var(--weight-regular) var(--size-small)/1.5 "Geist Mono", ui-monospace, monospace;
+        overflow-wrap: anywhere;
+      }
+      .x-addr { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding: 18px 22px; border-radius: var(--r-m); background: var(--fill-tertiary); margin-bottom: 16px; }
+      .x-addr code { font: var(--weight-regular) var(--size-body)/var(--lh) "Geist Mono", ui-monospace, monospace; overflow-wrap: anywhere; min-width: 0; flex: 1 1 260px; }
+      .x-gap { margin-top: 16px; }
+    </style>
+  </head>
+  <body>
+    <div class="page" id="top">
+      <header class="nav glass" data-auto></header>
+      <main class="main">
+        <section class="hero">
+          <img class="hero__img" src="hero100k.png" alt="Four neon 100K Club badges on black" />
+          <div class="hero__copy">
+            <p class="hero__eyebrow">Agent ID just passed 100,000 holders</p>
+            <h1>100K Club</h1>
+            <p class="hero__sub">10,000 on-chain badges for the first 100K Agent IDs. Agent-only. First mint free.</p>
+            <p class="hero__meta">SPACE ID Agent ID (.ai) only · BNB Smart Chain</p>
+          </div>
+          <aside class="callout" aria-label="Next step">
+            <p class="callout__head"><span class="hark-mark" data-size="16"></span> Next step</p>
+            <p class="callout__lead"><strong>Copy the Mint prompt and give it to your agent.</strong> First badge is free.</p>
+            <div class="x-live" aria-live="polite">
+              <p class="x-live__count"><span id="live-supply">—</span> / 10,000 minted</p>
+              <div class="x-bar" role="progressbar" aria-label="Badges minted" aria-valuemin="0" aria-valuemax="10000" aria-valuenow="0" id="live-bar-wrap"><div class="x-bar__fill" id="live-bar"></div></div>
+              <p class="fineprint">2nd mint now ≈ <span id="live-price">—</span> BNB · live from BSC</p>
+            </div>
+            <a class="btn" href="#mint" data-copy="prompt-1">Copy Mint prompt</a>
+          </aside>
+        </section>
+
+        <section class="stats" aria-label="Key facts">
+          <div class="stat"><span class="stat__fig">10,000</span><span class="stat__label">Supply</span></div>
+          <div class="stat"><span class="stat__fig">FREE</span><span class="stat__label">1st mint (gas only)</span></div>
+          <div class="stat"><span class="stat__fig">$0.50</span><span class="stat__label">2nd mint, in BNB</span></div>
+          <div class="stat"><span class="stat__fig">2</span><span class="stat__label">Max per wallet</span></div>
+        </section>
+
+        <section class="section" id="mint" data-nav="Mint">
+          <div class="head">
+            <p class="head__eyebrow">Mint with your agent</p>
+            <h2>Hand your agent one prompt and it mints for you.</h2>
+            <p class="head__sub">The wallet must hold a SPACE ID Agent ID (.ai).</p>
+          </div>
+          <div class="cards">
+            <div>
+              <h3>Mint 1 <span class="pill">free</span></h3>
+              <p class="x-prompt" id="prompt-1">Mint 1 100K Club badge on BSC: call mint(1) on contract 0xcd123737b1ab24bf97b4fcec0fe763de573bbe0b with value 0. Your wallet must hold a SPACE ID Agent ID (.ai). First badge per wallet is free (gas only).</p>
+              <a class="btn" href="#mint" data-copy="prompt-1">Copy</a>
+            </div>
+            <div>
+              <h3>Mint 2 <span class="pill">free + $0.50</span></h3>
+              <p class="x-prompt" id="prompt-2">Mint 2 100K Club badges on BSC: first read quote(myWallet, 2) on contract 0xcd123737b1ab24bf97b4fcec0fe763de573bbe0b, then call mint(2) sending that quote as the value (wei). Your wallet must hold a SPACE ID Agent ID (.ai). Max 2 per wallet; excess BNB is refunded.</p>
+              <a class="btn" href="#mint" data-copy="prompt-2">Copy</a>
+            </div>
+          </div>
+          <p class="fineprint x-gap">Already minted 1? Call quote(myWallet, 1) and mint(1) with that value for your second badge.</p>
+        </section>
+
+        <section class="section" id="rarity" data-nav="Rarity">
+          <div class="head">
+            <p class="head__eyebrow">Rarity</p>
+            <h2>Six tiers, four traits, art drawn by the contract itself.</h2>
+            <p class="head__sub">Fully on-chain. No IPFS.</p>
+          </div>
+          <figure class="band">
+            <img src="grid.png" alt="Nine sample 100K Club badges in different shapes, colors and backgrounds" />
+            <figcaption>Nine sample badges</figcaption>
+          </figure>
+          <div class="pair x-gap">
+            <div class="table-wrap">
+              <table>
+                <caption>Odds per badge</caption>
+                <thead>
+                  <tr><th scope="col">Tier</th><th scope="col">Odds</th></tr>
+                </thead>
+                <tbody>
+                  <tr><th scope="row">Common</th><td class="num">54.8%</td></tr>
+                  <tr><th scope="row">Uncommon</th><td class="num">25%</td></tr>
+                  <tr><th scope="row">Rare</th><td class="num">14%</td></tr>
+                  <tr><th scope="row">Legendary</th><td class="num">5%</td></tr>
+                  <tr><th scope="row">Mythic</th><td class="num">1%</td></tr>
+                  <tr class="is-highlight"><th scope="row">Genesis <small>Gold badge</small><span class="dot">Rarest</span></th><td class="num">0.2%</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="cards">
+              <div>
+                <h3>Shape <span class="pill">4</span></h3>
+                <p>Circle, Hexagon, Shield, Octagon</p>
+              </div>
+              <div>
+                <h3>Color <span class="pill">8</span></h3>
+                <p>Binance Gold, Cyber Mint, Hot Pink, Ice Blue, Lava, Violet, Lime, Chrome</p>
+              </div>
+              <div>
+                <h3>Background <span class="pill">6</span></h3>
+                <p>Void, Grid, Dusk, Matrix, Aurora, Deep Sea</p>
+              </div>
+              <div>
+                <h3>Mark <span class="pill">5</span></h3>
+                <p>Bolt, Star, Eye, Chip, Crown</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="contract" data-nav="Contract">
+          <div class="head">
+            <p class="head__eyebrow">Contract</p>
+            <h2>No owner, no pause, no withdraw, no upgrade.</h2>
+          </div>
+          <div class="x-addr">
+            <code id="addr">0xcd123737b1ab24bf97b4fcec0fe763de573bbe0b</code>
+            <div class="links">
+              <a class="btn" href="#contract" data-copy="addr">Copy address</a>
+              <a class="btn" href="https://bscscan.com/address/0xcd123737b1ab24bf97b4fcec0fe763de573bbe0b" target="_blank" rel="noopener">BscScan</a>
+            </div>
+          </div>
+          <div class="pair">
+            <div class="cards">
+              <div>
+                <h3>Agent ID gate</h3>
+                <p class="x-mono">0x60B9262456dE011F7d15a54CdD8c48bAaa8B022F</p>
+              </div>
+              <div>
+                <h3>Price feed</h3>
+                <p class="sub">Chainlink BNB/USD</p>
+                <p class="x-mono">0x0567F2323251f0Aab15c8dFb1967E4e8A7D42aeE</p>
+              </div>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <caption>Functions</caption>
+                <thead>
+                  <tr><th scope="col">Function</th><th scope="col">Does</th></tr>
+                </thead>
+                <tbody>
+                  <tr><th scope="row" class="x-mono">mint(uint256 qty)</th><td>Mints badges</td></tr>
+                  <tr><th scope="row" class="x-mono">quote(address wallet, uint256 qty)</th><td>Price in wei for that wallet</td></tr>
+                  <tr><th scope="row" class="x-mono">totalSupply()</th><td>Badges minted so far</td></tr>
+                  <tr><th scope="row" class="x-mono">mintedBy(address)</th><td>Badges a wallet has minted</td></tr>
+                  <tr><th scope="row" class="x-mono">tokenURI(id)</th><td>On-chain metadata and art</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="faq" data-nav="FAQ">
+          <div class="head"><h2>Short answers.</h2></div>
+          <div class="cards">
+            <div>
+              <h3>Who can mint?</h3>
+              <p>Only wallets holding a SPACE ID Agent ID (.ai).</p>
+            </div>
+            <div>
+              <h3>How much?</h3>
+              <p>First badge free (gas only), second $0.50 in BNB at the live Chainlink price.</p>
+            </div>
+            <div>
+              <h3>How many?</h3>
+              <p>10,000 total, max 2 per wallet.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+      <footer class="foot">
+        <p>Experimental collectible. Not financial advice.</p>
+        <nav aria-label="Back to sections" data-auto></nav>
+        <a class="badge" href="https://hark.com/" target="_blank" rel="noopener"><span class="hark-mark"></span><span>built by hark</span></a>
+      </footer>
+    </div>
+    <script src="hark.js"></script>
+    <script>
+      (function () {
+        // Copy buttons
+        function copyText(t) {
+          if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(t);
+          return new Promise(function (res, rej) {
+            var ta = document.createElement("textarea");
+            ta.value = t; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+            document.body.appendChild(ta); ta.select();
+            try { document.execCommand("copy") ? res() : rej(); } catch (e) { rej(e); }
+            document.body.removeChild(ta);
+          });
+        }
+        document.querySelectorAll("[data-copy]").forEach(function (b) {
+          b.setAttribute("role", "button");
+          var label = b.textContent;
+          b.addEventListener("click", function (e) {
+            e.preventDefault();
+            var src = document.getElementById(b.getAttribute("data-copy"));
+            copyText(src.textContent.trim()).then(function () { b.textContent = "Copied"; }, function () { b.textContent = "Select and copy"; })
+              .then(function () { setTimeout(function () { b.textContent = label; }, 1800); });
+          });
+        });
+
+        // Live data from BSC
+        var RPCS = ["https://bsc-rpc.publicnode.com", "https://bsc-dataseed.binance.org"];
+        var TO = "0xcd123737b1ab24bf97b4fcec0fe763de573bbe0b";
+        var elSupply = document.getElementById("live-supply"), elBar = document.getElementById("live-bar"),
+            elWrap = document.getElementById("live-bar-wrap"), elPrice = document.getElementById("live-price");
+        var last = { supply: null, price: null };
+
+        function call(data, i) {
+          i = i || 0;
+          return fetch(RPCS[i], {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ jsonrpc: "2.0", id: 1, method: "eth_call", params: [{ to: TO, data: data }, "latest"] })
+          }).then(function (r) { return r.json(); }).then(function (j) {
+            if (!j || !j.result || j.result === "0x") throw new Error("bad");
+            return BigInt(j.result);
+          }).catch(function (e) {
+            if (i + 1 < RPCS.length) return call(data, i + 1);
+            throw e;
+          });
+        }
+        function fmtBNB(wei) {
+          var whole = wei / 1000000000000000000n, frac = wei % 1000000000000000000n;
+          var f = (frac * 1000000n + 500000000000n) / 1000000000000n; // 6 decimals, rounded
+          if (f >= 1000000n) { whole += 1n; f -= 1000000n; }
+          return whole.toString() + "." + f.toString().padStart(6, "0");
+        }
+        function tick() {
+          call("0x18160ddd").then(function (v) {
+            var n = Number(v); last.supply = n;
+            elSupply.textContent = n.toLocaleString("en-US");
+            elBar.style.width = Math.min(100, n / 100) + "%";
+            elWrap.setAttribute("aria-valuenow", String(n));
+          }).catch(function () { if (last.supply === null) elSupply.textContent = "—"; });
+          call("0xb7ec2086").then(function (v) {
+            last.price = fmtBNB(v); elPrice.textContent = last.price;
+          }).catch(function () { if (last.price === null) elPrice.textContent = "—"; });
+        }
+        tick();
+        setInterval(tick, 20000);
+      })();
+    </script>
+  </body>
+</html>
